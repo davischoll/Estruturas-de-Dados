@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-void QuickSort (int vet[]);
+void bubbleSort (int vet[]);
 
 #define TAMANHOVETOR 10
 
@@ -18,12 +18,12 @@ int main()
   for (int i = 0; i < TAMANHOVETOR; i++)
     printf("%d\n", vet[i]);
   
-  QuickSort(vet);
+  bubbleSort(vet);
 
   return 0;
 }
 
-void QuickSort (int vet[])
+void bubbleSort (int vet[])
 {
   int aux;
 

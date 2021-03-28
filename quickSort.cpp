@@ -39,7 +39,6 @@ void QuickSort (int vet[], int inicio, int fim)
     QuickSort (vet, inicio, meio);
     QuickSort (vet, meio + 1, fim);
   }
-
 }
 
 int particao (int vet[], int inicio, int fim)
