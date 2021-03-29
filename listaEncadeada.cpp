@@ -18,11 +18,7 @@ struct ElementoListaSimples {
 
 int main()
 {
-  int c;
-  int op;
-  int num;
-  int posicao;
-  int retorno;
+  int c, op, num, posicao, retorno;
 
   while (1)
   {
@@ -96,12 +92,11 @@ int menu ()
   printf("6. Sair\n");
 
   printf("\n Escolha uma opção do menu acima: ");
-
   scanf("%d", &op);
-
   while ((c = getchar()) != '\n' && c != EOF) {}
 
   system("clear");
+
   return op;
 }
 
@@ -211,6 +206,7 @@ int removerElemento (int num)
       elementoVarredura = elementoVarredura->prox;
     }
   }
+
   return 0;
 }
 
@@ -225,7 +221,9 @@ void listar ()
   {
     printf("A lista não contém elementos.");
     printf("\nPressione uma tecla para voltar ao menu e adicionar.");
+    
     getchar();
+    
     return;
   }
   
@@ -238,5 +236,6 @@ void listar ()
   printf("\nPressione uma tecla para voltar ao menu.");
 
   getchar();
+  
   return; 
 }
