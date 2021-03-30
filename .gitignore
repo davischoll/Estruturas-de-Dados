@@ -1,5 +1,7 @@
+.vscode
 bubbleSort
 quickSort
 buscaSequencial
 buscaBinaria
 listaEncadeada
+pilha

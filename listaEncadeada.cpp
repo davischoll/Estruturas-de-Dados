@@ -80,8 +80,8 @@ int main()
 
 int menu ()
 {
-  int op;
-  int c;
+  int op, c;
+
   system("clear");
 
   printf("1. Inserir no início da lista encadeada simples\n");
@@ -236,6 +236,6 @@ void listar ()
   printf("\nPressione uma tecla para voltar ao menu.");
 
   getchar();
-  
+
   return; 
 }
