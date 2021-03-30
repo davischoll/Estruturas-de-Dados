@@ -81,9 +81,9 @@ void pop()
     printf("\n Valor removido da pilha com sucesso!");
     Top = temp->prox;
     free(temp);
+  }
 
-    getchar();
-  } 
+  getchar();
 }
 
 void display()
@@ -91,7 +91,7 @@ void display()
   Stack *elementoVarredura = Top;
 
   if (Top == NULL)
-    printf("\nA Pilha não contém dados!!");
+    printf("\nA Pilha não contém dados!");
   else
   {
     while (elementoVarredura->prox != NULL)
