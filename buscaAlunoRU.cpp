@@ -3,44 +3,53 @@
 #include <iostream>
 #include <locale.h>
 
-struct ElementoDaArvoreBinaria {
-  int dado;
+// Declaração da estrutura heterogênea que vai armazenar os dados dos alunos inseridos
+struct AlunoUninter {
+  int numRU;
   char nomeAluno[100];
   char emailAluno[100];
-  struct ElementoDaArvoreBinaria *direita;
-  struct ElementoDaArvoreBinaria *esquerda;
+  struct AlunoUninter *direita;
+  struct AlunoUninter *esquerda;
 };
 
-struct ElementoDaArvoreBinaria *root;
+// Declaração do nó inicial da árvore binária (Raiz)
+struct AlunoUninter *root;
 
+// Declaração das funções que serão utilizadas no programa, antes da função principal main()
 int menu();
-void inserir(ElementoDaArvoreBinaria **ElementoVarredura, int num, char nome[], char email[]);
-void listarEmOrdem (ElementoDaArvoreBinaria *ElementoVarredura);
-int buscar(ElementoDaArvoreBinaria *ElementoVarredura, int num);
+void inserir(AlunoUninter **ElementoVarredura, int ru, char nome[], char email[]);
+void listarEmOrdem (AlunoUninter *ElementoVarredura);
+struct AlunoUninter *buscar(AlunoUninter **ElementoVarredura, int ru);
 
 int main()
 {
   setlocale(LC_ALL, "Portuguese");
 
-  int op, num, pos, c, res;
+  // Inicialização das variáveis do tipo inteiro e struct, que serão utilizadas na aplicação
+  int op, ru, c;
 
-  root = (struct ElementoDaArvoreBinaria *)malloc(sizeof(struct ElementoDaArvoreBinaria));
+  root = (struct AlunoUninter *)malloc(sizeof(struct AlunoUninter));
   root = NULL;
 
-  struct ElementoDaArvoreBinaria aluno;
+  struct AlunoUninter aluno;
 
-  int elementoBusca;
-	// elementoBusca = (struct ElementoDaArvoreBinaria *)malloc(sizeof(struct ElementoDaArvoreBinaria));
+  struct AlunoUninter *elementoBusca;
+	elementoBusca = (struct AlunoUninter *)malloc(sizeof(struct AlunoUninter));
 
+  // Laço de repetição que fica exibindo o Menu na tela inicial do programa
   while (1) {
+    // 'op' recebe o retorno da função menu, que será um int
     op = menu();
 
+    // De acordo com o número da opção selecionada, o switch vai executar o case respectivo
     switch (op)
     {
     case 1:
+      // printf Solicita a inserção dos dados
+      // 'fgets' e 'scanf' guarda os valores inseridos nas variáveis
       printf("Digite o número do RU do Aluno: ");
-      scanf("%d", &num);
-      while ((c = getchar()) != '\n' && c != EOF) {}
+      scanf("%d", &ru);
+      while ((c = getchar()) != '\n' && c != EOF) {} // Limpa buffer do teclado
 
       printf("Digite o nome do Aluno que deseja incluir: ");
       fgets(aluno.nomeAluno, 100, stdin);
@@ -48,28 +57,39 @@ int main()
       printf("Digite o endereço de email do Aluno: ");
       fgets(aluno.emailAluno, 100, stdin);
 
-      inserir(&root, num, aluno.nomeAluno, aluno.emailAluno);
+      // Chama a função que vai inserir um novo registro na árvore de alunos,
+      // passando os parâmetros (dados) introduzidos pelo usuário
+      inserir(&root, ru, aluno.nomeAluno, aluno.emailAluno);
     break;
     case 2:
       printf("Digite o número a ser buscado: ");
-			scanf("%d", &num);
-      while ((c = getchar()) != '\n' && c != EOF) {} // sempre limpe o buffer do teclado.
-			
-      elementoBusca = buscar(root, num);
+			scanf("%d", &ru);
+      while ((c = getchar()) != '\n' && c != EOF) {}
 
-      printf("%d", elementoBusca);
+      // Chama a função buscar, passando o RU digitado para busca,
+      // e guarda o retorno desta função na variável elementoBusca
+      elementoBusca = buscar(&root, ru);
 
+      // Se retornar o elemento com o RU buscado, vai exibir os dados na tela
+      // Caso não encontre o RU buscado, vai mostrar a mensagem do else
 			if (elementoBusca != 0)
-				printf("Valor localizado.\n");
+      {
+				printf("RU: %d\n", elementoBusca->numRU);
+        printf(" | Aluno: %s", elementoBusca->nomeAluno);
+        printf(" | Email: %s\n", elementoBusca->emailAluno);
+        printf("Pressione uma tecla para retornar ao Menu.");
+      }
 			else
-				printf("Valor não encontrado na Árvore.\n");
+      {
+				printf("Número do RU não encontrado!\n");
+        printf("Pressione uma tecla para retornar ao Menu.");
+      }
 
 			getchar();
     break;
     case 3:
+      // Chamada da função que ordena a árvore em Ordem crescente
       listarEmOrdem(root);
-      printf("\n");
-      printf("\n");
       printf("Pressione uma tecla para retornar ao Menu.");
       getchar();
     break;
@@ -106,15 +126,16 @@ int menu() {
   return op;
 }
 
-void inserir(ElementoDaArvoreBinaria **ElementoVarredura, int num, char *nome, char *email) {
+// Declaração e implementação da função que insere um novo registro na árvore
+void inserir(AlunoUninter **ElementoVarredura, int ru, char *nome, char *email) {
   if (*ElementoVarredura == NULL)
   {
-    ElementoDaArvoreBinaria *NovoElemento = NULL;
-    NovoElemento = (struct ElementoDaArvoreBinaria *)malloc(sizeof(struct ElementoDaArvoreBinaria));
+    AlunoUninter *NovoElemento = NULL;
+    NovoElemento = (struct AlunoUninter *)malloc(sizeof(struct AlunoUninter));
     
     NovoElemento->esquerda = NULL;
     NovoElemento->direita = NULL;
-    NovoElemento->dado = num;
+    NovoElemento->numRU = ru;
     strcpy(NovoElemento->nomeAluno, nome);
     strcpy(NovoElemento->emailAluno, email);
 
@@ -123,39 +144,42 @@ void inserir(ElementoDaArvoreBinaria **ElementoVarredura, int num, char *nome, c
     return;
   }
 
-  if (num < (*ElementoVarredura)->dado)
-    inserir(&(*ElementoVarredura)->esquerda, num, nome, email);
-  else if (num > (*ElementoVarredura)->dado)
-    inserir(&(*ElementoVarredura)->direita, num, nome, email);
+  if (ru < (*ElementoVarredura)->numRU)
+    inserir(&(*ElementoVarredura)->esquerda, ru, nome, email);
+  else if (ru > (*ElementoVarredura)->numRU)
+    inserir(&(*ElementoVarredura)->direita, ru, nome, email);
 }
 
-void listarEmOrdem (ElementoDaArvoreBinaria *ElementoVarredura) {
+// Função que ordena a árvore Em Ordem e vai exibindo os dados na tela
+// Com chamada recursiva, colca primeiro os dados da esquerda, depois o
+// nó raiz e depois os dados da direita
+void listarEmOrdem (AlunoUninter *ElementoVarredura) {
   if (ElementoVarredura)
   {
     listarEmOrdem(ElementoVarredura->esquerda);
-    printf("RU: %d\n", ElementoVarredura->dado);
+    printf("RU: %d\n", ElementoVarredura->numRU);
     printf(" | Aluno: %s", ElementoVarredura->nomeAluno);
     printf(" | Email: %s\n", ElementoVarredura->emailAluno);
     listarEmOrdem(ElementoVarredura->direita);
   }
 }
 
-int buscar(ElementoDaArvoreBinaria *ElementoVarredura, int num) {
-  if (ElementoVarredura == NULL)
+// Função buscar, que vai fazer a busca pelo elemento informado
+// quando solicitado o item 2 do menu. Se encontrar o número informado,
+// vai retornar o elemento com os dados. Caso contrário, 0
+struct AlunoUninter *buscar(AlunoUninter **ElementoVarredura, int ru) {
+  AlunoUninter *elementoVarredura;
+  elementoVarredura = (struct AlunoUninter *)malloc(sizeof(struct AlunoUninter));
+
+  elementoVarredura = *ElementoVarredura;
+
+  if (elementoVarredura == NULL)
 	  return 0;
 
-	if (num < ElementoVarredura->dado)
-	{
-		buscar(ElementoVarredura->esquerda, num);
-	}
-	else if (num > ElementoVarredura->dado)
-	{
-		buscar(ElementoVarredura->direita, num);
-	}
-	else if (num == ElementoVarredura->dado)
-	{
-    return ElementoVarredura->dado;
-	}
-
-  return ElementoVarredura->dado;
+	if (ru < elementoVarredura->numRU)
+		buscar(&elementoVarredura->esquerda, ru);
+	else if (ru > elementoVarredura->numRU)
+		buscar(&elementoVarredura->direita, ru);
+	else if (ru == elementoVarredura->numRU)
+    return elementoVarredura;
 }
